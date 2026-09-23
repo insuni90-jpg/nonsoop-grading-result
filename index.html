@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nonsoop-design-system-cf042971-6136-4011-9b6f-587625369f57/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/nonsoop-design-system-cf042971-6136-4011-9b6f-587625369f57/tokens/fig-tokens.css">
+  <link rel="stylesheet" href="_ds/nonsoop-design-system-cf042971-6136-4011-9b6f-587625369f57/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/nonsoop-design-system-cf042971-6136-4011-9b6f-587625369f57/tokens/brand.css">
+  <link rel="stylesheet" href="_ds/nonsoop-design-system-cf042971-6136-4011-9b6f-587625369f57/styles.css">
+  <script src="_ds/nonsoop-design-system-cf042971-6136-4011-9b6f-587625369f57/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; background: #F9FAFB; font-family: Pretendard, -apple-system, system-ui, sans-serif; color: #111827; letter-spacing: -0.3px; -webkit-font-smoothing: antialiased; }
+    a { color: #008B48; text-decoration: none; } a:hover { color: #007A3F; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    [data-panel] { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .32s cubic-bezier(.2,.8,.3,1), opacity .22s ease; }
+    [data-panel="open"] { opacity: 1; }
+    [data-panel="open"][data-cap="lg"] { max-height: 2000px; }
+    [data-panel="open"][data-cap="md"] { max-height: 520px; }
+    [data-panel="open"][data-cap="sm"] { max-height: 240px; }
+  </style>
+</helmet>
+<div data-screen-label="채점 결과 v3" style="min-height:100vh;background:#F9FAFB;padding:40px 24px 80px;box-sizing:border-box;">
+  <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:24px;">
+
+    <header style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 30px;">
+      <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;">
+          <h1 style="margin:0;font-size:24px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#111827;text-wrap:pretty;">[유플러스]2026학년도_동국대_논술_인문1_테스트</h1>
+          <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 12px;border-radius:999px;background:rgb(241,238,251);font-size:12px;font-weight:500;line-height:1.5;color:rgb(121,94,214);white-space:nowrap;">심층 평가</span>
+          </sc-if>
+          <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+            <span style="display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 12px;border-radius:999px;background:rgb(254,245,202);font-size:12px;font-weight:500;line-height:1.5;color:rgb(239,172,3);white-space:nowrap;">기본 평가</span>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:14px;font-weight:500;color:#6B7280;line-height:1.5;">
+          <span>기출</span><span style="color:#D1D5DB;">/</span>
+          <span>2026년</span><span style="color:#D1D5DB;">/</span>
+          <span>동국대학교(서울)</span>
+        </div>
+      </div>
+      <p style="flex:0 1 auto;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:0;font-size:13px;font-weight:500;line-height:1.6;color:#9CA3AF;"><span>이인수(insuni)</span><span style="color:#E5E7EB;">|</span><span>채점 완료: 2026.09.11</span></p>
+    </header>
+
+    <nav style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+        <button type="button" onClick="{{ t.onClick }}" aria-disabled="{{ t.locked }}" title="{{ t.title }}" style="flex:none;display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:999px;border:1px {{ t.bdStyle }} {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }};font:inherit;font-size:13px;font-weight:700;cursor:{{ t.cursor }};white-space:nowrap;">{{ t.label }}<sc-if value="{{ t.locked }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;width:13px;height:13px;"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></span></sc-if></button>
+      </sc-for>
+    </nav>
+
+    <sc-if value="{{ isCommon }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:20px;animation:rise .4s ease both;">
+
+      <!-- 글쓰기 역량 점수 -->
+      <section data-screen-label="글쓰기 역량 점수" style="display:flex;flex-direction:column;gap:20px;background:#fff;border:1px solid #F3F4F6;border-radius:12px;padding:30px;box-shadow:0 1px 3px rgba(17,24,39,.04);box-sizing:border-box;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px 30px;padding-bottom:20px;border-bottom:1px solid #F3F4F6;">
+          <div style="position:relative;width:132px;height:132px;flex:none;">
+            <svg viewBox="0 0 132 132" width="132" height="132" style="display:block;transform:rotate(-90deg);">
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#F3F4F6" stroke-width="12"></circle>
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#008B48" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ writingArc }}"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;pointer-events:none;">
+              <span style="font-size:36px;font-weight:700;line-height:1;letter-spacing:-1.2px;color:#008B48;">{{ writingShown }}</span>
+              <span style="font-size:12px;font-weight:600;color:#6B7280;">/ 100</span>
+            </div>
+          </div>
+          <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;">
+              <h2 style="margin:0;font-size:24px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#111827;">글쓰기 역량 점수</h2>
+              <span style="font-size:13px;font-weight:500;color:#9CA3AF;">내용·구성·표현 세 영역 점수의 평균</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:8px;background:#F4FBF6;">
+              <span style="flex:none;padding:3px 10px;border-radius:999px;background:{{ writingGradeBg }};color:{{ writingGradeColor }};font-size:12px;font-weight:700;line-height:1.5;">{{ writingGradeLabel }}</span>
+              <p style="margin:0;font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;text-wrap:pretty;"><strong style="font-weight:700;color:#111827;">{{ writingHeadline }}</strong> {{ writingDetail }}</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ areas }}" as="a" hint-placeholder-count="3">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 50px;padding:20px 30px;border-radius:8px;background:#F9FAFB;box-sizing:border-box;">
+              <div style="flex:0 1 290px;max-width:290px;min-width:220px;display:flex;flex-direction:column;gap:5px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span style="width:6px;height:6px;border-radius:999px;background:{{ a.color }};"></span>
+                    <span style="font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;">{{ a.label }}</span>
+                  </span>
+                  <span style="display:flex;align-items:baseline;gap:2px;white-space:nowrap;"><span style="font-size:20px;font-weight:600;line-height:1.5;color:#111827;">{{ a.shown }}</span><span style="font-size:14px;font-weight:500;color:#6B7280;">/ 100</span></span>
+                </div>
+                <div style="height:9px;border-radius:5px;background:#E5E7EB;overflow:hidden;">
+                  <div style="height:100%;width:{{ a.width }};border-radius:5px;background:{{ a.color }};"></div>
+                </div>
+              </div>
+              <p style="flex:1 1 300px;min-width:0;margin:0;font-size:14px;font-weight:600;line-height:1.6;color:#4B5563;text-wrap:pretty;">{{ a.headline }} {{ a.detail }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- 심층 평가 넛지 -->
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="대학 기준 점수 (미열람)" style="position:relative;display:flex;flex-direction:column;gap:20px;background:#fff;border:1px dashed #BBD3EA;border-radius:12px;padding:30px;box-sizing:border-box;overflow:hidden;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px 30px;padding-bottom:20px;border-bottom:1px solid #F3F4F6;">
+          <div style="position:relative;width:132px;height:132px;flex:none;">
+            <svg viewBox="0 0 132 132" width="132" height="132" style="display:block;transform:rotate(-90deg);">
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#EAF1F8" stroke-width="12"></circle>
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#BBD3EA" stroke-width="12" stroke-linecap="round" stroke-dasharray="18 26"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#004E96;">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+              <span style="font-size:12px;font-weight:600;color:#6B7280;">?? / ??</span>
+            </div>
+          </div>
+          <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;">
+              <h2 style="margin:0;font-size:24px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#111827;">대학 기준 점수</h2>
+              <span style="font-size:13px;font-weight:500;color:#9CA3AF;">문제별 점수 합계 · 득점률 ??%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:8px;background:#F1F6FB;">
+              <span style="flex:none;padding:3px 10px;border-radius:999px;background:#E1EBF5;color:#004E96;font-size:12px;font-weight:700;line-height:1.5;">구간</span>
+              <span style="flex:1 1 auto;display:flex;flex-direction:column;gap:6px;min-width:0;">
+                <span style="display:block;height:9px;max-width:78%;border-radius:5px;background:#D8E5F1;"></span>
+                <span style="display:block;height:9px;max-width:52%;border-radius:5px;background:#E4EDF6;"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ lockedRows }}" as="r" hint-placeholder-count="1">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 50px;padding:20px 30px;border-radius:8px;background:#F9FAFB;box-sizing:border-box;">
+              <div style="flex:0 1 290px;max-width:290px;min-width:220px;display:flex;flex-direction:column;gap:5px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span style="width:6px;height:6px;border-radius:999px;background:#BBD3EA;"></span>
+                    <span style="font-size:14px;font-weight:500;line-height:1.6;color:#9CA3AF;">{{ r.no }}</span>
+                  </span>
+                  <span style="font-size:20px;font-weight:600;line-height:1.5;color:#D1D5DB;">?? <span style="font-size:14px;font-weight:500;">/ ??</span></span>
+                </div>
+                <div style="height:9px;border-radius:5px;background:#E5E7EB;overflow:hidden;">
+                  <div style="height:100%;width:{{ r.width }};border-radius:5px;background:#DCE6F0;"></div>
+                </div>
+              </div>
+              <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:7px;">
+                <span style="display:block;height:9px;border-radius:5px;background:#EDEFF2;"></span>
+                <span style="display:block;height:9px;max-width:86%;border-radius:5px;background:#EDEFF2;"></span>
+                <span style="display:block;height:9px;max-width:64%;border-radius:5px;background:#EDEFF2;"></span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px 30px;padding:24px 30px;border-radius:8px;background:#F1F6FB;border:1px solid #BBD3EA;">
+          <div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:8px;">
+            <span style="align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 12px;border-radius:999px;background:rgb(241,238,251);font-size:12px;font-weight:500;line-height:1.5;color:rgb(121,94,214);">심층 평가</span>
+            <h3 style="margin:0;font-size:18px;font-weight:700;line-height:1.45;color:#111827;text-wrap:pretty;">내 답안이 대학 기준 점수로 몇 점인지 확인해 보세요.</h3>
+            <ul style="display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none;">
+              <sc-for list="{{ fullBenefits }}" as="b" hint-placeholder-count="3">
+                <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.6;color:#4B5563;">
+                  <span style="flex:none;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-top:2px;color:#004E96;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                  </span>
+                  <span><strong style="font-weight:700;color:#111827;">{{ b.title }}</strong> {{ b.desc }}</span>
+                </li>
+              </sc-for>
+            </ul>
+          </div>
+          <div style="position:relative;flex:0 1 280px;display:flex;flex-direction:column;gap:8px;margin-top:38px;">
+            <img src="assets/mascot-univ.png" alt="" style="position:absolute;right:-6px;bottom:100%;width:92px;height:auto;margin-bottom:-8px;pointer-events:none;">
+            <button type="button" onClick="{{ goFull }}" style="width:100%;padding:14px 20px;border:0;border-radius:12px;background:#004E96;color:#fff;font:inherit;font-size:15px;font-weight:700;cursor:pointer;" style-hover="background:#003E78;">심층 평가 받기</button>
+
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- 대학 기준 점수 -->
+      <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="대학 기준 점수" style="display:flex;flex-direction:column;gap:20px;background:#fff;border:1px solid #F3F4F6;border-radius:12px;padding:30px;box-shadow:0 1px 3px rgba(17,24,39,.04);box-sizing:border-box;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px 30px;padding-bottom:20px;border-bottom:1px solid #F3F4F6;">
+          <div style="position:relative;width:132px;height:132px;flex:none;">
+            <svg viewBox="0 0 132 132" width="132" height="132" style="display:block;transform:rotate(-90deg);">
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#F3F4F6" stroke-width="12"></circle>
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#004E96" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ univArc }}"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;pointer-events:none;">
+              <span style="font-size:36px;font-weight:700;line-height:1;letter-spacing:-1.2px;color:#004E96;">{{ univShown }}</span>
+              <span style="font-size:12px;font-weight:600;color:#6B7280;">/ {{ univMax }}</span>
+            </div>
+          </div>
+          <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;">
+              <h2 style="margin:0;font-size:24px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#111827;">대학 기준 점수</h2>
+              <span style="font-size:13px;font-weight:500;color:#9CA3AF;">문제별 점수 합계 · 득점률 {{ univRate }}%</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:8px;background:#F1F6FB;">
+              <span style="flex:none;padding:3px 10px;border-radius:999px;background:{{ univGradeBg }};color:{{ univGradeColor }};font-size:12px;font-weight:700;line-height:1.5;">{{ univGradeLabel }}</span>
+              <p style="margin:0;font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;text-wrap:pretty;"><strong style="font-weight:700;color:#111827;">{{ univHeadline }}</strong> {{ univDetail }}</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ questions }}" as="q" hint-placeholder-count="2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 50px;padding:20px 30px;border-radius:8px;background:#F9FAFB;box-sizing:border-box;">
+              <div style="flex:0 1 290px;max-width:290px;min-width:220px;display:flex;flex-direction:column;gap:5px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <span style="width:6px;height:6px;border-radius:999px;background:#004E96;"></span>
+                    <span style="font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;">{{ q.no }}</span>
+                  </span>
+                  <span style="display:flex;align-items:baseline;gap:2px;white-space:nowrap;"><span style="font-size:20px;font-weight:600;line-height:1.5;color:#111827;">{{ q.score }}</span><span style="font-size:14px;font-weight:500;color:#6B7280;">/ {{ q.max }}</span></span>
+                </div>
+                <div style="height:9px;border-radius:5px;background:#E5E7EB;overflow:hidden;">
+                  <div style="height:100%;width:{{ q.width }};border-radius:5px;background:#004E96;"></div>
+                </div>
+              </div>
+              <p style="flex:1 1 300px;min-width:0;margin:0;font-size:14px;font-weight:600;line-height:1.6;color:#4B5563;white-space:pre-line;text-wrap:pretty;">{{ q.feedback }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <div style="display:flex;flex-direction:column;gap:6px;padding:0 4px;font-size:13px;line-height:1.6;color:#6B7280;">
+        <p style="margin:0;">대학 평가 기준을 적용한 AI 채점 결과로, 실제 대학 채점 결과와 다를 수 있습니다.</p>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isQuestion }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:20px;animation:rise .4s ease both;">
+
+      <!-- 글쓰기 역량 점수 -->
+      <section data-screen-label="문제 글쓰기 역량 점수" style="display:flex;flex-direction:column;gap:20px;background:#fff;border:1px solid #F3F4F6;border-radius:12px;padding:30px;box-shadow:0 1px 3px rgba(17,24,39,.04);box-sizing:border-box;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px 30px;padding-bottom:20px;border-bottom:1px solid #F3F4F6;">
+          <div style="position:relative;width:132px;height:132px;flex:none;">
+            <svg viewBox="0 0 132 132" width="132" height="132" style="display:block;transform:rotate(-90deg);">
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#F3F4F6" stroke-width="12"></circle>
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#008B48" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ qWritingArc }}"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;pointer-events:none;">
+              <span style="font-size:36px;font-weight:700;line-height:1;letter-spacing:-1.2px;color:#008B48;">{{ qWritingShown }}</span>
+              <span style="font-size:12px;font-weight:600;color:#6B7280;">/ 100</span>
+            </div>
+          </div>
+          <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;">
+              <h2 style="margin:0;font-size:24px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#111827;">글쓰기 역량 점수</h2>
+              <span style="font-size:13px;font-weight:500;color:#9CA3AF;">이 문제의 내용·구성·표현 평균</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:8px;background:#F4FBF6;">
+              <span style="flex:none;padding:3px 10px;border-radius:999px;background:{{ qWritingGradeBg }};color:{{ qWritingGradeColor }};font-size:12px;font-weight:700;line-height:1.5;">{{ qWritingGradeLabel }}</span>
+              <p style="margin:0;font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;text-wrap:pretty;">{{ activeQ.integratedOverall }}</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+          <sc-for list="{{ qAreas }}" as="a" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:5px;padding:20px 24px;border-radius:8px;background:#F9FAFB;box-sizing:border-box;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                <span style="display:flex;align-items:center;gap:6px;">
+                  <span style="width:6px;height:6px;border-radius:999px;background:{{ a.color }};"></span>
+                  <span style="font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;">{{ a.label }}</span>
+                </span>
+                <span style="display:flex;align-items:baseline;gap:2px;white-space:nowrap;"><span style="font-size:20px;font-weight:600;line-height:1.5;color:#111827;">{{ a.shown }}</span><span style="font-size:14px;font-weight:500;color:#6B7280;">/ 100</span></span>
+              </div>
+              <div style="height:9px;border-radius:5px;background:#E5E7EB;overflow:hidden;">
+                <div style="height:100%;width:{{ a.width }};border-radius:5px;background:{{ a.color }};"></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- 대학 기준 점수 (기본 평가 잠금) -->
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="문제 대학 기준 점수 (미열람)" style="display:flex;flex-direction:column;gap:20px;background:#fff;border:1px dashed #BBD3EA;border-radius:12px;padding:30px;box-sizing:border-box;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px 30px;padding-bottom:20px;border-bottom:1px solid #F3F4F6;">
+          <div style="position:relative;width:132px;height:132px;flex:none;">
+            <svg viewBox="0 0 132 132" width="132" height="132" style="display:block;transform:rotate(-90deg);">
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#EAF1F8" stroke-width="12"></circle>
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#BBD3EA" stroke-width="12" stroke-linecap="round" stroke-dasharray="18 26"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#004E96;">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+              <span style="font-size:12px;font-weight:600;color:#6B7280;">?? / ??</span>
+            </div>
+          </div>
+          <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;">
+              <h2 style="margin:0;font-size:24px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#111827;">대학 기준 점수</h2>
+              <span style="font-size:13px;font-weight:500;color:#9CA3AF;">평가 기준 점수 합계 · 득점률 ??%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:8px;background:#F1F6FB;">
+              <span style="flex:none;padding:3px 10px;border-radius:999px;background:#E1EBF5;color:#004E96;font-size:12px;font-weight:700;line-height:1.5;">구간</span>
+              <span style="flex:1 1 auto;display:flex;flex-direction:column;gap:6px;min-width:0;">
+                <span style="display:block;height:9px;max-width:78%;border-radius:5px;background:#D8E5F1;"></span>
+                <span style="display:block;height:9px;max-width:52%;border-radius:5px;background:#E4EDF6;"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ lockedRows }}" as="r" hint-placeholder-count="1">
+            <div style="display:flex;flex-direction:column;gap:16px;padding:24px 30px;border-radius:8px;background:#F9FAFB;box-sizing:border-box;">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <span style="font-size:13px;font-weight:700;color:#BBD3EA;">평가 기준 1</span>
+                <span style="display:block;height:12px;max-width:70%;border-radius:6px;background:#EDEFF2;"></span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px 50px;padding-top:16px;border-top:1px solid #E5E7EB;">
+                <div style="flex:0 1 290px;max-width:290px;min-width:220px;display:flex;flex-direction:column;gap:5px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                    <span style="font-size:14px;font-weight:500;color:#9CA3AF;">평가 점수</span>
+                    <span style="font-size:20px;font-weight:600;line-height:1.5;color:#D1D5DB;">?? <span style="font-size:14px;font-weight:500;">/ ??</span></span>
+                  </div>
+                  <div style="height:9px;border-radius:5px;background:#E5E7EB;overflow:hidden;">
+                    <div style="height:100%;width:{{ r.width }};border-radius:5px;background:#DCE6F0;"></div>
+                  </div>
+                </div>
+                <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:7px;">
+                  <span style="display:block;height:9px;border-radius:5px;background:#EDEFF2;"></span>
+                  <span style="display:block;height:9px;max-width:86%;border-radius:5px;background:#EDEFF2;"></span>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px 30px;padding:24px 30px;border-radius:8px;background:#F1F6FB;border:1px solid #BBD3EA;">
+          <div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:8px;">
+            <span style="align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 12px;border-radius:999px;background:rgb(241,238,251);font-size:12px;font-weight:500;line-height:1.5;color:rgb(121,94,214);">심층 평가</span>
+            <h3 style="margin:0;font-size:18px;font-weight:700;line-height:1.45;color:#111827;text-wrap:pretty;">이 문제의 대학 기준 점수와 모범 답안을 확인해 보세요.</h3>
+            <p style="margin:0;font-size:14px;line-height:1.6;color:#4B5563;text-wrap:pretty;">평가 기준별 점수와 채점 근거, 모범 답안은 심층 평가에서 열립니다.</p>
+          </div>
+          <div style="position:relative;flex:0 1 280px;display:flex;flex-direction:column;gap:8px;margin-top:38px;">
+            <img src="assets/mascot-univ.png" alt="" style="position:absolute;right:-6px;bottom:100%;width:92px;height:auto;margin-bottom:-8px;pointer-events:none;">
+            <button type="button" onClick="{{ goFull }}" style="width:100%;padding:14px 20px;border:0;border-radius:12px;background:#004E96;color:#fff;font:inherit;font-size:15px;font-weight:700;cursor:pointer;" style-hover="background:#003E78;">심층 평가 받기</button>
+
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- 대학 기준 점수 · 평가 기준 -->
+      <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="문제 대학 기준 점수" style="display:flex;flex-direction:column;gap:20px;background:#fff;border:1px solid #F3F4F6;border-radius:12px;padding:30px;box-shadow:0 1px 3px rgba(17,24,39,.04);box-sizing:border-box;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px 30px;padding-bottom:20px;border-bottom:1px solid #F3F4F6;">
+          <div style="position:relative;width:132px;height:132px;flex:none;">
+            <svg viewBox="0 0 132 132" width="132" height="132" style="display:block;transform:rotate(-90deg);">
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#F3F4F6" stroke-width="12"></circle>
+              <circle cx="66" cy="66" r="58" fill="none" stroke="#004E96" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ qUnivArc }}"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;pointer-events:none;">
+              <span style="font-size:36px;font-weight:700;line-height:1;letter-spacing:-1.2px;color:#004E96;">{{ qUnivShown }}</span>
+              <span style="font-size:12px;font-weight:600;color:#6B7280;">/ {{ activeQ.max }}</span>
+            </div>
+          </div>
+          <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;">
+              <h2 style="margin:0;font-size:24px;font-weight:700;line-height:1.4;letter-spacing:-0.4px;color:#111827;">대학 기준 점수</h2>
+              <span style="font-size:13px;font-weight:500;color:#9CA3AF;">평가 기준 {{ qRubricCount }}개 점수 합계 · 득점률 {{ qUnivRate }}%</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:8px;background:#F1F6FB;">
+              <span style="flex:none;padding:3px 10px;border-radius:999px;background:{{ qUnivGradeBg }};color:{{ qUnivGradeColor }};font-size:12px;font-weight:700;line-height:1.5;">{{ qUnivGradeLabel }}</span>
+              <p style="margin:0;font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;text-wrap:pretty;">{{ activeQ.analyticOverall }}</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <sc-for list="{{ qRubrics }}" as="r" hint-placeholder-count="2">
+            <div style="display:flex;flex-direction:column;gap:16px;padding:24px 30px;border-radius:8px;background:#F9FAFB;box-sizing:border-box;">
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <span style="font-size:13px;font-weight:700;color:#004E96;">{{ r.no }}</span>
+                <p style="margin:0;font-size:15px;font-weight:600;line-height:1.6;color:#111827;text-wrap:pretty;">{{ r.criterion }}</p>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px 50px;padding-top:16px;border-top:1px solid #E5E7EB;">
+                <div style="flex:0 1 290px;max-width:290px;min-width:220px;display:flex;flex-direction:column;gap:5px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                    <span style="display:flex;align-items:center;gap:6px;">
+                      <span style="width:6px;height:6px;border-radius:999px;background:#004E96;"></span>
+                      <span style="font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;">평가 점수</span>
+                    </span>
+                    <span style="display:flex;align-items:baseline;gap:2px;white-space:nowrap;"><span style="font-size:20px;font-weight:600;line-height:1.5;color:#111827;">{{ r.score }}</span><span style="font-size:14px;font-weight:500;color:#6B7280;">/ {{ r.max }}</span></span>
+                  </div>
+                  <div style="height:9px;border-radius:5px;background:#E5E7EB;overflow:hidden;">
+                    <div style="height:100%;width:{{ r.width }};border-radius:5px;background:#004E96;"></div>
+                  </div>
+                </div>
+                <p style="flex:1 1 300px;min-width:0;margin:0;font-size:14px;font-weight:600;line-height:1.6;color:#4B5563;text-wrap:pretty;">{{ r.feedback }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- 내 답안 · 모범 답안 -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <section style="background:#fff;border:1px solid #F3F4F6;border-radius:12px;box-shadow:0 1px 3px rgba(17,24,39,.04);overflow:hidden;">
+          <button type="button" onClick="{{ answerPanel.onToggle }}" aria-expanded="{{ answerPanel.open }}" style="display:flex;width:100%;align-items:center;justify-content:space-between;gap:16px;padding:22px 30px;border:0;background:transparent;font:inherit;text-align:left;cursor:pointer;" style-hover="background:#F9FAFB;">
+            <span style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;">
+              <span style="font-size:16px;font-weight:700;color:#111827;">제출 답안</span>
+            </span>
+            <span style="display:inline-flex;width:20px;height:20px;flex:none;color:#6B7280;">{{ answerPanel.icon }}</span>
+          </button>
+          <div data-panel="{{ answerPanel.state }}" data-cap="md">
+            <div>
+              <div style="display:flex;flex-direction:column;gap:12px;padding:0 30px 30px;">
+                <div style="display:flex;justify-content:flex-end;">
+                  <span style="font-size:13px;font-weight:500;color:#6B7280;">{{ activeQ.chars }}자 (적정 {{ activeQ.charMin }}~{{ activeQ.charLimit }}자)</span>
+                </div>
+                <p style="margin:0;padding:24px;border-radius:8px;background:#F9FAFB;font-size:16px;line-height:1.9;color:#111827;word-break:keep-all;">{{ activeQ.answer }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="background:#fff;border:1px solid #F3F4F6;border-radius:12px;box-shadow:0 1px 3px rgba(17,24,39,.04);overflow:hidden;">
+          <button type="button" onClick="{{ modelPanel.onToggle }}" aria-expanded="{{ modelPanel.open }}" style="display:flex;width:100%;align-items:center;justify-content:space-between;gap:16px;padding:22px 30px;border:0;background:transparent;font:inherit;text-align:left;cursor:pointer;" style-hover="background:#F9FAFB;">
+            <span style="font-size:16px;font-weight:700;color:#111827;">모범 답안</span>
+            <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+              <span style="display:inline-flex;width:20px;height:20px;flex:none;color:#6B7280;">{{ modelPanel.icon }}</span>
+            </sc-if>
+            <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+              <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:#F3F4F6;font-size:12px;font-weight:600;color:#9CA3AF;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+                심층 평가 전용
+              </span>
+            </sc-if>
+          </button>
+          <div data-panel="{{ modelPanel.state }}" data-cap="sm">
+            <div>
+              <div style="padding:0 30px 30px;">
+                <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div style="display:flex;justify-content:flex-end;">
+                      <span style="font-size:13px;font-weight:500;color:#6B7280;">{{ modelChars }}자 (적정 {{ activeQ.charMin }}~{{ activeQ.charLimit }}자)</span>
+                    </div>
+                    <p style="margin:0;padding:24px;border-radius:8px;background:#F9FAFB;font-size:16px;line-height:1.9;color:#111827;word-break:keep-all;">{{ activeQ.model }}</p>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+      <p style="margin:0;padding:0 4px;font-size:13px;line-height:1.6;color:#6B7280;">글쓰기 역량 점수는 내용·구성·표현 세 영역 점수의 평균이고, 대학 기준 점수는 평가 기준별 점수를 합한 점수예요.</p>
+    </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;gradingMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;기본 평가&quot;,&quot;options&quot;:[&quot;심층 평가&quot;,&quot;기본 평가&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;채점 상품&quot;},&quot;questionSet&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;2문제&quot;,&quot;options&quot;:[&quot;2문제&quot;,&quot;10문제&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;데이터&quot;},&quot;overrideScores&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;점수 조정 (구간 문구 확인용)&quot;},&quot;writingScore&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:88,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;점&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;점수 조정 (구간 문구 확인용)&quot;},&quot;univRate&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:95,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;점수 조정 (구간 문구 확인용)&quot;}}">
+const AREAS = [
+  { key: 'content', label: '내용', color: '#7CA6EB', score: 88,
+    headline: '논지에서 빈틈을 찾기 어려운 점수대예요.', detail: '반론을 세우고 되받는 깊이를 더하면 완성도가 올라가요.' },
+  { key: 'structure', label: '구성', color: '#F5B26B', score: 84,
+    headline: '짜임새가 좋은 점수대예요.', detail: '처음 주장이 끝까지 흔들리지 않으면 최상위 구성에 가까워져요.' },
+  { key: 'expression', label: '표현', color: '#B39DE8', score: 91,
+    headline: '어휘와 문장이 모두 세련된 것이 강점인 점수대예요.', detail: '문장 리듬까지 조율하면 최상위예요.' },
+];
+
+const WRITING_BANDS = [
+  { min: 90, headline: '기본기가 이미 최상위권에 닿아 있어요.', detail: '남은 과제는 세 영역의 편차를 줄이는 일이에요.' },
+  { min: 80, headline: '최상위권을 노려보는 점수대예요.', detail: '표현력이 강점이니 구성만 보완하면 90점대가 보여요.' },
+  { min: 65, headline: '기본기는 안정적으로 갖춘 점수대예요.', detail: '가장 낮은 영역 하나만 끌어올려도 전체가 함께 올라가요.' },
+  { min: 50, headline: '뜻은 통하지만 다듬을 곳이 남아 있어요.', detail: '문단 단위로 주장과 근거를 다시 배치해 보세요.' },
+  { min: 0, headline: '기본 골격을 세우는 연습이 먼저 필요해요.', detail: '주장 한 문장, 근거 두 문장 구조로 짧게 써보세요.' },
+];
+
+// 대학 기준 점수 구간 문구 Ver 1.0 — 표시 득점률 기준 11구간
+const UNIV_BANDS = [
+  { min: 100, headline: '요구 사항을 모두 충족한 답안이에요.', detail: '지금의 접근을 다른 문제에서도 유지하면 돼요.' },
+  { min: 95, headline: '평가 기준을 충실히 충족한 답안이에요.', detail: '지금의 접근을 그대로 이어가면 돼요.' },
+  { min: 90, headline: '요구 사항을 거의 빠짐없이 충족한 답안이에요.', detail: '마지막 감점 요인은 조건 확인에서 나와요.' },
+  { min: 85, headline: '평가 기준에 비추어 큰 빈틈이 없는 답안이에요.', detail: '세부 조건까지 챙기면 완성도가 더 올라가요.' },
+  { min: 80, headline: '요구 사항을 폭넓게 충족한 답안이에요.', detail: '조건을 표면적으로만 다룬 곳이 없는지 살펴봐요.' },
+  { min: 75, headline: '충족한 조건이 눈에 띄게 늘어난 답안이에요.', detail: '놓친 세부 조건을 채우면 한 단계 올라서요.' },
+  { min: 70, headline: '평가 기준에 안정적으로 다가선 답안이에요.', detail: '조건별로 답의 분량이 고른지 확인해봐요.' },
+  { min: 65, headline: '요구 사항을 무난하게 소화한 답안이에요.', detail: '근거를 조건에 맞춰 붙이면 완성도가 올라가요.' },
+  { min: 60, headline: '평가 기준을 대체로 충족한 답안이에요.', detail: '조건마다 답이 분명히 드러나는지 살펴봐요.' },
+  { min: 35, headline: '요구 조건의 일부를 담아낸 답안이에요.', detail: '빠뜨린 조건이 없는지 확인하는 습관을 들여봐요.' },
+  { min: 0, headline: '평가 기준에 맞추는 연습이 필요한 단계예요.', detail: '문제가 요구한 조건부터 하나씩 짚어봐요.' },
+];
+
+// 표시 득점률: 만점이면 100, 그 외는 반올림 후 99 상한
+const displayRate = (got, max) => got === max ? 100 : Math.min(Math.round(got / max * 100), 99);
+
+const ANSWER = '현대 사회는 눈부신 의료 기술의 발달과 급격한 출생률 감소로 인해 초고령화 사회에 진입하고 있다. 이에 따라 생산 가능 인구는 감소하는 반면 노인 인구 비율은 급증하여, 청년층이 짊어져야 할 부양 부담이 임계점에 달하고 있다. 특히 저성장 기조가 고착화되고 부동산 가격이 폭등한 구조 속에서, 청년 세대는 계층 이동의 기회를 잃고 극심한 경제적 위기에 내몰려 세대 간 갈등마저 심화되는 실정이다. 이러한 상황에서 청년들의 부양 기피 현상을 단순히 개인의 윤리적 책임 의식 결여로 매도해서는 안 된다. 노인 부양은 더 이상 개별 가정이나 특정 세대만의 몫이 아니며, 국가적 차원의 사회 안전망 구축과 조세 및 복지 제도 확충을 통해 사회 전체가 공동으로 책임져야 할 시대적 과제이다.';
+
+const A1 = '제시문들에 나오는 사람들은 저항을 하게 되는 모습을 볼 수가 있는데 그것에 대한 이유랑 결과를 적어보면 이렇다고 볼 수 있다. (가)에서 동생은 자기들이 살아온 시간하고 집을 막 부수는 게 억울하고 부당하니까 행정 절차에 맞서서 따지려고 대든 것인데, 그 결과로 철거반 사람들한테 얻어맞고 피를 흘리면서 밖으로 쫓겨나 쓰러지는 비극이 생겼다. (나)에 나오는 의사는 공기가 나빠서 병이 난다는 옛날 사람들의 엉터리 통념에 그냥 안 따르고 의심하면서 저항을 한 것인데, 물을 꼼꼼하게 조사해가지고 진짜 원인이 오염된 식수 때문이라는 걸 밝혀내서 병을 막고 의학을 발전시키는 결과를 냈다. (다)의 며느리는 외국 사람이라고 의심하고 머리채까지 잡는 시댁의 억압이 싫고 억울해서 저항으로 손목을 꺾어버렸는데, 시아버지가 쓰러지고 결국 인연이 다 끊어져서 집을 나가버리는 결말이 났다. (라)의 민 씨는 황만근이 안 돌아왔는데 바보 취급하면서 신경도 안 쓰는 이장의 태도에 따지면서 저항을 했지만, 마을 사람들이 안 도와줘서 결국 황만근은 뼈 항아리가 되어 돌아왔다.';
+const A2 = '남의 힘든 일에 대해서 민 씨는 없어진 황만근을 진짜로 걱정해주면서 찾아보려고 나서는 사람인 반면에, 문 서방이라는 사람은 자기한테 잘해준 지주 어르신이 산 것만 좋아하고 다른 사람들이 죽어 나가는 거는 신나게 구경거리로 보면서 사람 목숨을 차별하고 즐긴다는 점에서 차이가 크다. 근데 이장이랑 문 서방의 비슷한 점을 보면 둘 다 어떤 특정 사람이 힘들어하거나 죽든 말든 차갑게 모른 척하고 당연하다고 여긴다는 공통점이 있다. 그래서 이장한테는 자세가 필요한데 첫 번째로는 (바)에서 나오는 리비히 법칙처럼 사회나 도시가 잘 굴러가려면 제일 잘난 곳보다 가장 모자라고 취약한 약자 부분을 잘 받쳐줘야 건강해진다는 걸 알고 약자를 감싸 안는 태도가 필요하다. 그리고 두 번째로는 (사)에서 땅바닥에 낮게 핀 작은 꽃이나 땅속의 안 보이는 뿌리까지 하나하나 다 챙기는 것처럼, 모자라 보이고 작아 보이는 황만근 같은 사람도 함부로 대하지 말고 조심스럽게 귀하게 여기고 챙겨주는 그런 배려하는 마음을 가져야 한다.';
+const A3 = 'GMO 업계는 생산량이 늘고 비용이 줄어든다는 좋은 점만 말을 하고 있는데, (자)의 관점으로 따져서 비판을 해보면 종잣값이나 전용 제초제 사는 데 드는 눈에 보이는 명시적 비용만 있는 게 아니라, 잡초에 내성이 생겨서 더 돈이 들고 기업에 끌려다니고 생태계가 망가지는 숨어 있는 암묵적 비용까지 다 합친 기회비용을 계산 안 했으니까 엉터리인 것이다. 그래서 지속 가능해지려면 (사)처럼 인위적으로 손대지 말고 자연 순환이랑 안 보이는 자리까지 기다려주며 챙겨야 하고, (차)의 말처럼 인간이 자연의 주인이 아니고 그물망의 한 가닥일 뿐이니까 자연을 망치지 말고 같이 살아가려는 조심스러운 태도를 가져야 한다.';
+const MODEL_PLACEHOLDER = '모범 답안 본문이 들어갈 자리입니다. 원본 채점 결과에 모범 답안 데이터가 포함되어 있지 않아 문구를 비워 두었습니다.';
+const PASSAGE_NOTE = '제시문 원문은 채점 데이터에 포함되지 않아 자리만 표시했습니다.';
+const NOTE_PASSAGE = { hasText: true, text: PASSAGE_NOTE };
+
+const QUESTIONS = [
+  { no: '문제 1', subject: '인문(국어)', score: 70, max: 80,
+    title: '(가)~(라)에 나타난 저항의 이유와 결과를 각 제시문의 사건과 인물에 맞게 서술하시오.',
+    condition: '570자 이내 · 제시문 (가)~(라) 활용',
+    chars: 537, charMin: 401, charLimit: 570, charsNoSpace: 406, submittedAt: '2026. 9. 11. 오후 2:47:06',
+    answer: A1, model: MODEL_PLACEHOLDER,
+    passages: [
+      { label: '[가]', hasText: true, text: '우리는 사회 속에서 많은 사람들과 관계를 맺으며, 환경과 영향을 주고받으며 살아가고 있다. 이처럼 복잡한 현대 사회에서 일어나는 현상을 하나의 관점만으로 설명한다는 것은 거의 불가능하다. 따라서 시간적·공간적·사회적·윤리적인 관점을 통해 종합적으로 이해하려고 노력할 필요가 있다.\n시간적 관점이란 우리 삶의 모습을 ‘과거’라는 거울에 비추어 보는 것이다. 다시 말해 시대적 배경과 맥락에 초점을 두고 사회 현상을 바라보는 것이다. (중략) 사회적 관점은 특정한 사회 현상을 사회 제도 및 사회 구조와의 관련성 속에서 이해하는 것이다. (중략) 윤리적 관점은 도덕적 가치 판단과 규범적 방향성에 초점을 두고 사회에서 발생하는 다양한 현상과 문제를 이해한다. (중략) 사회 문제를 특정한 관점으로만 분석하여 해결책을 찾으려 하면, 그 문제의 속성을 깊이 있게 이해할 수 없어 적절한 대책을 세우기 어렵다. 따라서 사회 문제를 탐구할 때에는 시간적, 공간적, 사회적, 윤리적 관점 등을 활용하여 통합적으로 바라보아야 한다.' },
+      { label: '[나]-이미지1', hasImage: true, src: 'assets/passage-na-1.png', caption: '(1) 우리나라 노인 부양비 및 인구 구성비 추계 (통계청, 2016)' },
+      { label: '[나]-이미지2', hasImage: true, src: 'assets/passage-na-2.png', caption: '(2) 노부모 부양에 대한 책임 의식의 변화 (통계청, 각 해당 연도)' },
+    ],
+    rubrics: [
+      { criterion: '(가)~(라) 각 제시문에서 저항의 이유를 사건과 인물에 맞게 정확히 파악하여 서술한 경우',
+        axis: '내용', score: 24, max: 24,
+        feedback: '학생은 각 제시문에서 저항의 이유와 결과를 명확하게 파악하고 서술하였습니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+      { criterion: '(가)~(라) 각 제시문에서 저항의 결과를 사건과 인물에 맞게 정확히 파악하여 서술한 경우',
+        axis: '내용', score: 24, max: 24,
+        feedback: '학생은 각 제시문에서 저항의 이유와 결과를 명확하게 파악하고 서술하였습니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+      { criterion: '네 제시문의 공통점과 차이를 대비하며 하나의 논리적 글로 정리한 경우',
+        axis: '내용', score: 10, max: 20,
+        feedback: '학생은 각 제시문에서 저항 이유와 결과를 구체적으로 언급했으나, 네 제시문의 공통점과 차이점을 종합적으로 비교하지 않고 개별적인 설명에 집중했습니다.',
+        integrated: { 내용: 75, 구성: 70, 표현: 78 } },
+      { criterion: '서론-본론-결론의 흐름이 드러나고 표현이 간결하며 정확한 경우',
+        axis: '구성', score: 12, max: 12,
+        feedback: '서론-본론-결론의 흐름이 명확하게 드러나며, 표현이 간결하고 정확합니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+    ],
+    analyticOverall: '학생은 각 제시문에서 저항의 이유와 결과를 잘 설명했으나, 네 제시문의 공통점과 차이점을 대비하며 하나의 논리적 글로 정리하는 데는 부족함이 있습니다.',
+    integratedOverall: '학생은 제시문들을 잘 분석하고 각 제시문에서의 저항 이유와 결과를 명확히 파악하여 서술했습니다. 전체적으로 내용이 잘 구성되어 있으며 표현도 간결하고 정확합니다. 다만 네 제시문의 공통점과 차이를 대비하며 하나의 논리적 글로 정리하는 부분에서는 약간의 개선이 필요합니다.' },
+
+  { no: '문제 2', subject: '인문(국어)', score: 80, max: 80,
+    title: '민 씨와 문 서방의 차이, 이장과 문 서방의 유사점을 서술하고 (바)·(사)에서 이장에게 필요한 자세를 찾아 제시하시오.',
+    condition: '570자 이내 · 제시문 (라)~(사) 활용',
+    chars: 508, charMin: 401, charLimit: 570, charsNoSpace: 380, submittedAt: '2026. 9. 11. 오후 2:47:06',
+    answer: A2, model: MODEL_PLACEHOLDER,
+    passages: [
+      { label: '(라)', ...NOTE_PASSAGE }, { label: '(마)', ...NOTE_PASSAGE },
+      { label: '(바)', ...NOTE_PASSAGE }, { label: '(사)', ...NOTE_PASSAGE },
+    ],
+    rubrics: [
+      { criterion: '민 씨와 문 서방의 차이를 타인의 곤경을 대하는 태도와 판단 기준의 차이로 정확히 설명한 경우',
+        axis: '내용', score: 30, max: 30,
+        feedback: '민 씨와 문 서방의 차이를 타인의 곤경을 대하는 태도와 판단 기준의 차이로 정확히 설명하였으며, 이장에게 필요한 자세 또한 제시문 (바)와 (사)에서 각각 찾아 명확히 서술하였습니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+      { criterion: '이장과 문 서방의 유사점을 자기중심성, 타인 무관심, 생명 경시의 측면에서 정확히 설명한 경우',
+        axis: '내용', score: 30, max: 30,
+        feedback: '이장과 문 서방의 유사점을 자기중심성, 타인 무관심, 생명 경시의 측면에서 정확히 설명하였습니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+      { criterion: '(바)에서 공동체의 지속을 위해 작은 존재도 필요하다는 점을 이장에게 필요한 자세로 연결한 경우',
+        axis: '내용', score: 10, max: 10,
+        feedback: '학생은 (바)에서 작은 존재의 필요성을 이장의 자세와 연결하여 잘 설명하였으며, 이를 통해 공동체의 지속 가능성을 강조하였습니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+      { criterion: '(사)에서 작고 하찮아 보이는 존재를 귀하게 여기고 기다리는 태도를 이장에게 필요한 자세로 연결한 경우',
+        axis: '내용', score: 10, max: 10,
+        feedback: '학생은 (사)에서 작고 하찮아 보이는 존재를 귀하게 여기고 기다리는 태도를 이장에게 필요한 자세로 연결하여 만점 기준을 충족했습니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 95 } },
+    ],
+    analyticOverall: '학생은 민 씨와 문 서방의 차이를 타인의 곤경을 대하는 태도와 판단 기준의 차이로 정확히 설명하였고, 이장과 문 서방의 유사점을 자기중심성, 타인 무관심, 생명 경시의 측면에서 정확히 설명하였습니다. 또한 (바)와 (사)에서 이장에게 필요한 자세를 잘 연결하여 서술하였습니다.',
+    integratedOverall: '답안은 전체적으로 매우 우수하며, 질문의 요구사항에 따라 민 씨와 문 서방의 차이점 및 이장과 문 서방의 유사점을 명확히 설명하였습니다. 또한 이장에게 필요한 자세를 제시문 (바)와 (사)에서 잘 찾아 서술하였습니다.' },
+
+  { no: '문제 3', subject: '인문(국어)', score: 40, max: 40,
+    title: '(아)의 GMO 업계 주장을 (자)의 관점에서 비판하고, (사)·(차)를 바탕으로 지속 가능성을 위한 방안을 제시하시오.',
+    condition: '350자 이내 · 제시문 (사)~(차) 활용',
+    chars: 341, charMin: 250, charLimit: 350, charsNoSpace: 257, submittedAt: '2026. 9. 11. 오후 2:47:06',
+    answer: A3, model: MODEL_PLACEHOLDER,
+    passages: [
+      { label: '(사)', ...NOTE_PASSAGE }, { label: '(아)', ...NOTE_PASSAGE },
+      { label: '(자)', ...NOTE_PASSAGE }, { label: '(차)', ...NOTE_PASSAGE },
+    ],
+    rubrics: [
+      { criterion: '(아)의 GMO 업계 주장을 (자)의 명시적 비용과 암묵적 비용 개념으로 비판한 경우',
+        axis: '내용', score: 16, max: 16,
+        feedback: 'GMO 업계의 주장에 대해 명시적 비용과 암묵적 비용을 모두 고려하여 비판한 점이 뛰어납니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+      { criterion: 'GMO 선택이 단순 절감이 아니라 더 큰 기회비용을 낳을 수 있음을 설명한 경우',
+        axis: '내용', score: 8, max: 8,
+        feedback: '핵심 주장과 근거가 명확하며 요구 요소를 충실히 갖춘 답안입니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+      { criterion: '(사)에서 자연의 순서와 기다림의 태도를 지속 가능성의 기준으로 연결한 경우',
+        axis: '내용', score: 8, max: 8,
+        feedback: '학생은 (사)에서 자연의 순서와 기다림의 태도를 지속 가능성의 기준으로 연결하여, GMO 업계가 지속 가능성을 위해 고려해야 할 점을 명확히 제시하였습니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+      { criterion: '(차)에서 인간과 대지의 상호의존성을 생태계 보전의 근거로 제시한 경우',
+        axis: '내용', score: 8, max: 8,
+        feedback: '(차)의 관점을 명확히 이해하고 이를 바탕으로 GMO 업계의 문제점과 지속 가능성을 위한 방안을 효과적으로 제시하였습니다.',
+        integrated: { 내용: 92, 구성: 92, 표현: 92 } },
+    ],
+    analyticOverall: '학생의 답안은 요구된 모든 요소를 충족하고 있으며, 특히 (사)와 (차)의 관점을 효과적으로 활용하여 지속 가능성을 위한 구체적인 방안을 제시한 점이 뛰어납니다.',
+    integratedOverall: '학생은 GMO 업계의 입장을 (자)의 관점에서 비판하고, (사)와 (차)를 통해 지속 가능성을 위한 방안을 잘 제시하였습니다. 전체적으로 논리적이고 명확하게 내용을 전달하였으며, 요구된 요소들을 충실히 반영하였습니다.' },
+];
+
+const AREA_KEYS = ['내용', '구성', '표현'];
+const avgOf = arr => Math.round(arr.reduce((s, v) => s + v, 0) / arr.length);
+const areaAvgs = qs => {
+  const rows = qs.flatMap(q => q.rubrics.map(r => r.integrated));
+  return AREA_KEYS.reduce((acc, k) => { acc[k] = avgOf(rows.map(r => r[k])); return acc; }, {});
+};
+
+const GRADE_BANDS = [
+  { min: 100, label: '만점', color: '#00661A', bg: '#E6F4ED' },
+  { min: 85, label: '우수', color: '#008B48', bg: '#EEF8F1' },
+  { min: 60, label: '안정', color: '#8A6200', bg: '#FEF5CA' },
+  { min: 35, label: '발전', color: '#4B5563', bg: '#F3F4F6' },
+  { min: 0, label: '기초', color: '#B3251E', bg: '#FDECEA' },
+];
+
+const Q10 = [
+  { title: '[가]를 바탕으로 [나] 자료를 분석하시오.', score: 27, max: 30,
+    feedback: '학생은 민씨와 문서방의 차이점을 타인의 곤경을 대하는 태도와 판단 기준의 차이로 정확히 설명하였고, 이장과 문서방의 유사점을 자기 중심성, 타인 무관심, 생명 경시의 측면에서 정확히 설명했습니다.' },
+  { title: '[다]와 [라]의 관점 차이를 서술하고 [마]를 평가하시오.', score: 22, max: 30,
+    feedback: '모든 제시문에서 저항의 이유와 결과를 사건과 인물에 맞게 정확히 파악하여 서술하였기 때문에 만점 기준에 부합합니다.' },
+  { title: '[바]의 통계가 시사하는 사회 변화를 설명하시오.', score: 25, max: 30,
+    feedback: '통계의 추세를 정확히 읽었고 사회 변화와의 연결도 자연스럽습니다. 변화의 원인을 한 단계 더 설명하면 분석이 깊어져요.' },
+  { title: '[사]의 주장에 대한 반론을 제시하시오.', score: 19, max: 30,
+    feedback: '반론의 방향은 타당하지만 근거가 한 문장에 머물러 주장의 무게가 가볍습니다. 근거를 두 가지 이상 제시해 보세요.' },
+  { title: '제시문 전체를 관통하는 핵심 쟁점을 요약하시오.', score: 28, max: 30,
+    feedback: '여러 제시문을 하나의 쟁점으로 묶어낸 점이 좋습니다. 요약 문장이 길어지지 않도록 다듬으면 더 선명해져요.' },
+  { title: '[아]의 개념을 활용해 [자]의 사례를 해석하시오.', score: 24, max: 30,
+    feedback: '개념 적용은 정확하지만 사례의 세부 정보가 일부 누락됐습니다. 사례를 개념의 각 요소에 하나씩 대응시켜 보세요.' },
+  { title: '세대 간 갈등의 원인을 두 가지로 나누어 서술하시오.', score: 21, max: 30,
+    feedback: '두 원인을 구분한 기준이 다소 겹칩니다. 구조적 요인과 인식적 요인처럼 축을 분명히 나누면 좋겠습니다.' },
+  { title: '[차]의 정책 대안을 비판적으로 검토하시오.', score: 26, max: 30,
+    feedback: '대안의 한계를 짚은 근거가 구체적입니다. 대체 방안까지 한 문장 덧붙이면 검토가 완결됩니다.' },
+  { title: '자료 [카]의 한계를 지적하고 보완 방향을 제안하시오.', score: 23, max: 30,
+    feedback: '자료의 한계를 정확히 지적했습니다. 보완 방향이 다소 일반적이어서 자료 특성에 맞춘 제안이 필요합니다.' },
+  { title: '본인의 관점에서 대안을 제시하고 근거를 밝히시오.', score: 20, max: 30,
+    feedback: '관점은 분명하지만 근거가 주장을 충분히 받치지 못합니다. 제시문에서 근거를 인용해 연결해 보세요.' },
+].map((q, i) => {
+  const half = Math.round(q.max / 2), got = Math.round(q.score * 0.55);
+  const base = 70 + (q.score / q.max) * 25;
+  const iv = d => ({ 내용: Math.round(base + d), 구성: Math.round(base - 2 + d), 표현: Math.round(base + 1 + d) });
+  return { ...q, no: `문제 ${i + 1}`, subject: '인문(국어)', condition: '600자 이내',
+    chars: 520 + i * 7, charMin: 401, charLimit: 600, charsNoSpace: 380 + i * 5, submittedAt: '2026. 9. 11. 오후 2:47:06',
+    passages: [{ label: '(가)', ...NOTE_PASSAGE }, { label: '(나)', ...NOTE_PASSAGE }],
+    rubrics: [
+      { criterion: '요구한 핵심 내용을 제시문과 연결하여 서술한 경우', axis: '내용',
+        score: got, max: half, feedback: '요구한 핵심 내용을 대체로 갖추었습니다.', integrated: iv(0) },
+      { criterion: '근거를 구체적으로 제시하고 글의 흐름을 유지한 경우', axis: '구성',
+        score: q.score - got, max: q.max - half, feedback: '근거 서술의 구체성을 보완하면 좋겠습니다.', integrated: iv(-3) },
+    ],
+    analyticOverall: q.feedback,
+    integratedOverall: q.feedback,
+    answer: ANSWER, model: MODEL_PLACEHOLDER };
+});
+
+const C = 2 * Math.PI * 58;
+const bandOf = (bands, v) => bands.find(b => v >= b.min) || bands[bands.length - 1];
+
+class Component extends DCLogic {
+  state = { tab: 'common', progress: 0, mode: null, panels: {} };
+  componentDidMount() {
+    this.onVis = () => { if (document.visibilityState === 'visible' && this.state.progress < 1) this.finish(); };
+    document.addEventListener('visibilitychange', this.onVis);
+    this.start();
+  }
+  componentWillUnmount() {
+    document.removeEventListener('visibilitychange', this.onVis);
+    cancelAnimationFrame(this.raf); clearTimeout(this.guard);
+  }
+  componentDidUpdate() { if (this.state.tab !== this.prevTab) { this.prevTab = this.state.tab; this.start(); } }
+  finish() { cancelAnimationFrame(this.raf); clearTimeout(this.guard); this.setState({ progress: 1 }); }
+  start() {
+    cancelAnimationFrame(this.raf); clearTimeout(this.guard);
+    if (this.props.animate === false) { this.setState({ progress: 1 }); return; }
+    const t0 = performance.now(), dur = 900;
+    const step = t => {
+      const p = Math.min(1, (t - t0) / dur);
+      this.setState({ progress: 1 - Math.pow(1 - p, 3) });
+      if (p < 1) this.raf = requestAnimationFrame(step);
+    };
+    this.setState({ progress: 0 });
+    this.raf = requestAnimationFrame(step);
+    this.guard = setTimeout(() => { if (this.state.progress < 1) this.finish(); }, dur + 600);
+  }
+  panel(key) {
+    const open = !!this.state.panels?.[key];
+    const DS = window.DesignSystem_cf0429 || {};
+    const Icon = DS.IconNavigationExpandDown;
+    const iconStyle = { width: 20, height: 20, display: 'block',
+      transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+      transition: 'transform .28s cubic-bezier(.2,.8,.3,1)' };
+    return { open, label: open ? '접기' : '펼쳐보기',
+      state: open ? 'open' : 'closed',
+      icon: Icon ? React.createElement(Icon, { style: iconStyle }) : React.createElement('span', { style: iconStyle }, '▼'),
+      onToggle: () => this.setState(s => ({ panels: { ...(s.panels || {}), [key]: !(s.panels || {})[key] } })) };
+  }
+  questionVals(q, QS, progress) {
+    const areas = areaAvgs([q]);
+    const qWriting = avgOf(AREA_KEYS.map(k => areas[k]));
+    const wG = bandOf(GRADE_BANDS, qWriting);
+    const rate = Math.round(q.score / q.max * 100);
+    const uG = bandOf(GRADE_BANDS, rate);
+    const idx = QS.indexOf(q);
+    return {
+      activeQ: { ...q, passages: q.passages.map(p => ({ ...p,
+        img: p.hasImage ? React.createElement('img', { src: p.src, alt: p.caption,
+          style: { display: 'block', width: '100%', maxWidth: '520px', height: 'auto' } }) : null })) },
+      qWritingShown: Math.round(qWriting * progress),
+      qWritingArc: `${C * qWriting / 100 * progress} ${C}`,
+      qWritingGradeLabel: wG.label, qWritingGradeColor: '#00661A', qWritingGradeBg: '#E6F4ED',
+      qUnivShown: Math.round(q.score * progress),
+      qUnivArc: `${C * (q.score / q.max) * progress} ${C}`,
+      qUnivRate: rate, qUnivGradeLabel: uG.label, qUnivGradeColor: '#004E96', qUnivGradeBg: '#E1EBF5',
+      qAreas: AREA_KEYS.map((k, i) => ({ label: k, color: AREAS[i].color, score: areas[k],
+        shown: Math.round(areas[k] * progress), width: `${areas[k] * progress}%` })),
+      qRubricCount: q.rubrics.length,
+      modelChars: (q.model || '').length,
+      qRubrics: q.rubrics.map((r, i) => ({ ...r, no: `평가 기준 ${i + 1}`,
+        width: `${r.score / r.max * 100 * progress}%`,
+        full: r.score === r.max,
+        stateLabel: r.score === r.max ? '만점' : r.score === 0 ? '미획득' : '부분 획득',
+        stateColor: '#004E96',
+        stateBg: '#E1EBF5',
+        integratedRows: AREA_KEYS.map((k, j) => ({ label: k, color: AREAS[j].color, value: r.integrated[k] })) })),
+      qPrev: idx > 0 ? { label: QS[idx - 1].no, onClick: () => this.setState({ tab: 'q' + (idx - 1), panels: {} }) } : null,
+      qNext: idx < QS.length - 1 ? { label: QS[idx + 1].no, onClick: () => this.setState({ tab: 'q' + (idx + 1), panels: {} }) } : null,
+      hasPrev: idx > 0, hasNext: idx < QS.length - 1,
+      goCommon: () => this.setState({ tab: 'common', panels: {} }),
+      passagePanel: this.panel('passages'), answerPanel: this.panel('answer'),
+      modelPanel: this.props.gradingMode === '기본 평가' && this.state.mode !== 'full'
+        ? { ...this.panel('model'), state: 'closed', onToggle: () => {} }
+        : this.panel('model'),
+    };
+  }
+  renderVals() {
+    const { progress } = this.state;
+    const mode = this.state.mode ?? (this.props.gradingMode === '기본 평가' ? 'light' : 'full');
+    const isLight = mode === 'light';
+    const tab = this.state.tab;
+    const QS = this.props.questionSet === '10문제' ? Q10 : QUESTIONS;
+    const baseAreas = areaAvgs(QS);
+    const baseWriting = avgOf(AREA_KEYS.map(k => baseAreas[k]));
+    const univMax = QS.reduce((s, q) => s + q.max, 0);
+    const override = !!this.props.overrideScores;
+    const writing = override ? Math.round(this.props.writingScore ?? baseWriting) : baseWriting;
+    const overallAreas = baseAreas;
+    const rate = override
+      ? Math.round(this.props.univRate ?? 95)
+      : displayRate(QS.reduce((s, q) => s + q.score, 0), univMax);
+    const univTotal = override
+      ? Math.round(univMax * rate / 100)
+      : QS.reduce((s, q) => s + q.score, 0);
+    const wBand = bandOf(WRITING_BANDS, writing), uBand = bandOf(UNIV_BANDS, rate);
+    const wGrade = bandOf(GRADE_BANDS, writing), uGrade = bandOf(GRADE_BANDS, rate);
+    const tabs = [{ id: 'common', label: '총평' }, ...QS.map((q, i) => ({ id: 'q' + i, label: q.no }))].map(t => {
+      const on = t.id === tab;
+      return { ...t, locked: false,
+        bg: on ? '#008B48' : '#fff',
+        fg: on ? '#fff' : '#4B5563',
+        bd: on ? '#008B48' : '#E5E7EB',
+        bdStyle: 'solid', cursor: 'pointer', title: '',
+        onClick: () => this.setState({ tab: t.id, panels: {} }) };
+    });
+    const activeQ = tab.startsWith('q') ? QS[+tab.slice(1)] : null;
+    return {
+      tabs, isCommon: tab === 'common', isQuestion: !!activeQ,
+      isLight, isFull: !isLight,
+      modeLabel: isLight ? '기본 평가' : '심층 평가',
+      modeBadgeType: isLight ? 'secondary' : 'brand',
+
+      writingShown: Math.round(writing * progress), writingArc: `${C * writing / 100 * progress} ${C}`,
+      writingHeadline: wBand.headline, writingDetail: wBand.detail,
+      writingGradeLabel: wGrade.label, writingGradeColor: '#00661A', writingGradeBg: '#E6F4ED',
+      univGradeLabel: uGrade.label, univGradeColor: '#004E96', univGradeBg: '#E1EBF5',
+      areas: AREAS.map(a => {
+        const v = override ? writing : (overallAreas[a.label] ?? a.score);
+        const copy = override ? { headline: wBand.headline, detail: wBand.detail } : a;
+        return { ...a, headline: copy.headline, detail: copy.detail,
+          score: v, shown: Math.round(v * progress), width: `${v * progress}%` };
+      }),
+      univShown: Math.round(univTotal * progress), univMax, univRate: rate,
+      univArc: `${C * (univTotal / univMax) * progress} ${C}`,
+      univHeadline: uBand.headline, univDetail: uBand.detail,
+      questions: QS.map(q => {
+        const score = override ? Math.round(q.max * rate / 100) : q.score;
+        const band = bandOf(UNIV_BANDS, displayRate(score, q.max));
+        return { ...q, score,
+          feedback: override ? `${band.headline} ${band.detail}` : q.analyticOverall,
+          width: `${score / q.max * 100 * progress}%` };
+      }),
+      fullBenefits: [
+        { title: '대학 기준 점수', desc: '대학 평가 기준 배점으로 채점한 점수와 문제별 점수를 확인할 수 있어요.' },
+        { title: '문제별 채점 근거', desc: '평가 기준마다 어디서 점수를 얻고 잃었는지 알려드려요.' },
+        { title: '모범 답안', desc: '내 답안과 나란히 비교하며 읽어볼 수 있어요.' },
+      ],
+      goFull: () => this.setState({ mode: 'full' }),
+      lockedRows: [{ no: '문제 1', width: '62%' }],
+      ...this.questionVals(activeQ || QS[0], QS, progress),
+    };
+  }
+}
+</script>
+</body>
+</html>

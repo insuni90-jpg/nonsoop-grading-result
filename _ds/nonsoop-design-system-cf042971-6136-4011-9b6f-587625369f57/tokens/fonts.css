@@ -1,0 +1,23 @@
+/* 논숲 webfonts. Pretendard = UI/body, SUIT = logo/display, NanumSquare Neo = brand mode,
+   Apple SD Gothic Neo = native iOS system font (test-ios mode). Declared under the exact
+   Figma family names; woff2 served from official CDNs (jsDelivr / NAVER). Replace with local
+   woff2 if fully offline self-hosting is required. */
+
+/* Pretendard (static family name) + Pretendard Variable — one variable woff2 covers all weights. */
+@font-face{font-family:"Pretendard";src:url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");font-weight:45 920;font-display:swap}
+@font-face{font-family:"Pretendard Variable";src:url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");font-weight:45 920;font-display:swap}
+
+/* SUIT Variable — logo/display. */
+@font-face{font-family:"SUIT Variable";src:url("https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.woff2") format("woff2-variations");font-weight:100 900;font-display:swap}
+
+/* Apple SD Gothic Neo — native Apple system font (test-ios mode); resolved from the OS, no webfont exists. */
+@font-face{font-family:"Apple SD Gothic Neo";src:local("Apple SD Gothic Neo"),local("AppleSDGothicNeo-Regular");font-weight:400;font-display:swap}
+@font-face{font-family:"Apple SD Gothic Neo";src:local("Apple SD Gothic Neo SemiBold"),local("AppleSDGothicNeo-SemiBold");font-weight:600;font-display:swap}
+@font-face{font-family:"Apple SD Gothic Neo";src:local("Apple SD Gothic Neo Bold"),local("AppleSDGothicNeo-Bold");font-weight:700;font-display:swap}
+
+/* NanumSquare Neo (brand mode) — served under the Figma-declared family name from NAVER's official webfont CDN. */
+@font-face{font-family:"NanumSquare Neo variable";src:url("https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-aLt.woff2") format("woff2");font-weight:300;font-display:swap}
+@font-face{font-family:"NanumSquare Neo variable";src:url("https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-bRg.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"NanumSquare Neo variable";src:url("https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-cBd.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"NanumSquare Neo variable";src:url("https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-dEb.woff2") format("woff2");font-weight:800;font-display:swap}
+@font-face{font-family:"NanumSquare Neo variable";src:url("https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-eHv.woff2") format("woff2");font-weight:900;font-display:swap}

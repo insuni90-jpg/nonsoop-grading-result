@@ -1,0 +1,20 @@
+/* 논숲 brand anchor + resets.
+   The default token mode resolves --primary-500 to a darker green (rgb(0,102,26)),
+   but the product and brand spec use #008B48. Re-anchor the primary scale so every
+   semantic alias (--brand-primary, --border-brand, --text-brand, --icon-brand …)
+   renders the true brand green. Accent (#B5E82A) already matches. */
+:root {
+  --primary-500: rgb(0,139,72);   /* #008B48 — Trust green */
+  --primary-600: rgb(0,122,63);   /* hover  */
+  --primary-700: rgb(0,101,53);   /* pressed */
+  --primary-800: rgb(0,79,42);
+  --primary-900: rgb(0,57,30);
+
+  /* convenience brand aliases */
+  --brand-green: #008B48; /* @kind color */
+  --brand-lime: #B5E82A; /* @kind color */
+}
+
+/* Link defaults — designs pick up brand green, not browser blue */
+a{color:var(--brand-primary,#008B48);text-decoration:none}
+a:hover{color:var(--brand-primary-hover,#007A3F);text-decoration:underline}

@@ -1,0 +1,50 @@
+/* 논숲 Typography — Pretendard drives UI/body, SUIT drives logo & large display.
+   Rebuilt from the Figma font-usage inventory (no registered text styles in the file). */
+:root {
+  --font-ui: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* @kind font */
+  --font-display: "SUIT Variable", "SUIT", "Pretendard Variable", "Pretendard", sans-serif; /* @kind font */
+
+  --fw-regular: 400; /* @kind font */
+  --fw-medium: 500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700; /* @kind font */
+
+  /* Type scale (px) — the sizes actually used in the file */
+  --fs-caption: 12px; /* @kind font */
+  --fs-body-sm: 14px; /* @kind font */
+  --fs-body: 16px; /* @kind font */
+  --fs-body-lg: 17px; /* @kind font */
+  --fs-title-sm: 18px; /* @kind font */
+  --fs-title: 20px; /* @kind font */
+  --fs-title-lg: 22px; /* @kind font */
+  --fs-heading-sm: 24px; /* @kind font */
+  --fs-heading: 26px; /* @kind font */
+  --fs-heading-lg: 30px; /* @kind font */
+  --fs-display-sm: 40px; /* @kind font */
+  --fs-display: 50px; /* @kind font */
+  --fs-display-lg: 60px; /* @kind font */
+
+  --lh-tight: 1.3; /* @kind other */
+  --lh-snug: 1.4; /* @kind other */
+  --lh-normal: 1.5; /* @kind other */
+  --lh-relaxed: 1.7; /* @kind other */
+
+  --ls-tight: -0.4px; /* @kind spacing */
+  --ls-normal: -0.3px; /* @kind spacing */
+  --ls-none: 0; /* @kind spacing */
+}
+
+/* ── Text style utility classes ───────────────────────────── */
+.type-display-lg{font-family:var(--font-display);font-weight:var(--fw-bold);font-size:var(--fs-display-lg);line-height:var(--lh-tight);letter-spacing:var(--ls-tight)}
+.type-display{font-family:var(--font-display);font-weight:var(--fw-bold);font-size:var(--fs-display);line-height:var(--lh-tight);letter-spacing:var(--ls-tight)}
+.type-display-sm{font-family:var(--font-display);font-weight:var(--fw-bold);font-size:var(--fs-display-sm);line-height:var(--lh-tight);letter-spacing:var(--ls-tight)}
+.type-heading-lg{font-family:var(--font-ui);font-weight:var(--fw-bold);font-size:var(--fs-heading-lg);line-height:var(--lh-snug);letter-spacing:var(--ls-normal)}
+.type-heading{font-family:var(--font-ui);font-weight:var(--fw-semibold);font-size:var(--fs-heading);line-height:var(--lh-snug);letter-spacing:var(--ls-normal)}
+.type-heading-sm{font-family:var(--font-ui);font-weight:var(--fw-semibold);font-size:var(--fs-heading-sm);line-height:var(--lh-snug);letter-spacing:var(--ls-normal)}
+.type-title-lg{font-family:var(--font-ui);font-weight:var(--fw-bold);font-size:var(--fs-title-lg);line-height:var(--lh-snug);letter-spacing:var(--ls-normal)}
+.type-title{font-family:var(--font-ui);font-weight:var(--fw-semibold);font-size:var(--fs-title);line-height:var(--lh-snug);letter-spacing:var(--ls-normal)}
+.type-title-sm{font-family:var(--font-ui);font-weight:var(--fw-semibold);font-size:var(--fs-title-sm);line-height:var(--lh-snug);letter-spacing:var(--ls-normal)}
+.type-body-lg{font-family:var(--font-ui);font-weight:var(--fw-medium);font-size:var(--fs-body-lg);line-height:var(--lh-normal);letter-spacing:var(--ls-normal)}
+.type-body{font-family:var(--font-ui);font-weight:var(--fw-medium);font-size:var(--fs-body);line-height:var(--lh-normal);letter-spacing:var(--ls-normal)}
+.type-body-sm{font-family:var(--font-ui);font-weight:var(--fw-medium);font-size:var(--fs-body-sm);line-height:var(--lh-snug);letter-spacing:var(--ls-normal)}
+.type-caption{font-family:var(--font-ui);font-weight:var(--fw-medium);font-size:var(--fs-caption);line-height:var(--lh-snug);letter-spacing:var(--ls-normal)}
