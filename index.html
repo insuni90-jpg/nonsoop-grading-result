@@ -18,6 +18,8 @@
     html, body { margin: 0; background: #F9FAFB; font-family: Pretendard, -apple-system, system-ui, sans-serif; color: #111827; letter-spacing: -0.3px; -webkit-font-smoothing: antialiased; }
     a { color: #008B48; text-decoration: none; } a:hover { color: #007A3F; }
     @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
     [data-panel] { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .32s cubic-bezier(.2,.8,.3,1), opacity .22s ease; }
     [data-panel="open"] { opacity: 1; }
     [data-panel="open"][data-cap="lg"] { max-height: 2000px; }
@@ -226,7 +228,13 @@
       </sc-if>
 
       <div style="display:flex;flex-direction:column;gap:6px;padding:0 4px;font-size:13px;line-height:1.6;color:#6B7280;">
-        <p style="margin:0;">대학 평가 기준을 적용한 AI 채점 결과로, 실제 대학 채점 결과와 다를 수 있습니다.</p>
+        <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+        <p style="display:flex;gap:6px;margin:0;"><span style="flex:none;">•</span><span>글쓰기 역량 점수는 내용·구성·표현 세 영역 점수의 평균이고, 대학 기준 점수는 평가 기준별 점수를 모두 합한 점수예요.</span></p>
+        <p style="display:flex;gap:6px;margin:0;"><span style="flex:none;">•</span><span>대학 기준 점수는 대학 평가 기준을 적용한 AI 채점 결과로, 실제 대학 평가 결과와 다를 수 있어요.</span></p>
+        </sc-if>
+        <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+        <p style="display:flex;gap:6px;margin:0;"><span style="flex:none;">•</span><span>글쓰기 역량 점수는 내용·구성·표현 세 영역 점수의 평균이에요.</span></p>
+        </sc-if>
       </div>
     </div>
     </sc-if>
@@ -332,8 +340,17 @@
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px 30px;padding:24px 30px;border-radius:8px;background:#F1F6FB;border:1px solid #BBD3EA;">
           <div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:8px;">
             <span style="align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 12px;border-radius:999px;background:rgb(241,238,251);font-size:12px;font-weight:500;line-height:1.5;color:rgb(121,94,214);">심층 평가</span>
-            <h3 style="margin:0;font-size:18px;font-weight:700;line-height:1.45;color:#111827;text-wrap:pretty;">이 문제의 대학 기준 점수와 모범 답안을 확인해 보세요.</h3>
-            <p style="margin:0;font-size:14px;line-height:1.6;color:#4B5563;text-wrap:pretty;">평가 기준별 점수와 채점 근거, 모범 답안은 심층 평가에서 열립니다.</p>
+            <h3 style="margin:0;font-size:18px;font-weight:700;line-height:1.45;color:#111827;text-wrap:pretty;">내 답안이 대학 기준 점수로 몇 점인지 확인해 보세요.</h3>
+            <ul style="display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none;">
+              <sc-for list="{{ fullBenefits }}" as="b" hint-placeholder-count="3">
+                <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.6;color:#4B5563;">
+                  <span style="flex:none;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-top:2px;color:#004E96;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                  </span>
+                  <span><strong style="font-weight:700;color:#111827;">{{ b.title }}</strong> {{ b.desc }}</span>
+                </li>
+              </sc-for>
+            </ul>
           </div>
           <div style="position:relative;flex:0 1 280px;display:flex;flex-direction:column;gap:8px;margin-top:38px;">
             <img src="assets/mascot-univ.png" alt="" style="position:absolute;right:-6px;bottom:100%;width:92px;height:auto;margin-bottom:-8px;pointer-events:none;">
@@ -449,10 +466,40 @@
       </div>
 
 
-      <p style="margin:0;padding:0 4px;font-size:13px;line-height:1.6;color:#6B7280;">글쓰기 역량 점수는 내용·구성·표현 세 영역 점수의 평균이고, 대학 기준 점수는 평가 기준별 점수를 합한 점수예요.</p>
+      <div style="display:flex;flex-direction:column;gap:6px;padding:0 4px;font-size:13px;line-height:1.6;color:#6B7280;">
+        <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+        <p style="display:flex;gap:6px;margin:0;"><span style="flex:none;">•</span><span>글쓰기 역량 점수는 내용·구성·표현 세 영역 점수의 평균이고, 대학 기준 점수는 평가 기준별 점수를 모두 합한 점수예요.</span></p>
+        <p style="display:flex;gap:6px;margin:0;"><span style="flex:none;">•</span><span>대학 기준 점수는 대학 평가 기준을 적용한 AI 채점 결과로, 실제 대학 평가 결과와 다를 수 있어요.</span></p>
+        </sc-if>
+        <sc-if value="{{ isLight }}" hint-placeholder-val="{{ false }}">
+        <p style="display:flex;gap:6px;margin:0;"><span style="flex:none;">•</span><span>글쓰기 역량 점수는 내용·구성·표현 세 영역 점수의 평균이에요.</span></p>
+        </sc-if>
+      </div>
     </div>
     </sc-if>
   </div>
+
+  <!-- 심층 평가 확인 모달 -->
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;">
+    <div onClick="{{ closeConfirm }}" style="position:absolute;inset:0;background:rgba(17,24,39,.5);animation:fade .2s ease both;"></div>
+    <div role="dialog" aria-modal="true" aria-labelledby="confirm-title" style="position:relative;width:100%;max-width:440px;display:flex;flex-direction:column;gap:20px;padding:32px;border-radius:16px;background:#fff;box-shadow:0 20px 40px rgba(17,24,39,.18);box-sizing:border-box;animation:pop .22s cubic-bezier(.2,.8,.3,1) both;">
+      <h2 id="confirm-title" style="margin:0;font-size:20px;font-weight:600;line-height:1.5;color:#111827;text-align:center;">심층 평가를 진행하시겠습니까?</h2>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:8px;background:#E6F4ED;box-sizing:border-box;font-size:14px;font-weight:500;line-height:1.6;color:#4B5563;text-align:center;">{{ examTopic }}</div>
+        <div style="display:flex;flex-direction:column;gap:16px;padding:20px;border:1px solid #E5E7EB;border-radius:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;color:#6B7280;"><span style="font-size:12px;font-weight:500;">보유 완두콩</span><span style="font-size:14px;font-weight:500;">{{ peas.have }}개</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:12px;font-weight:500;color:#6B7280;">필요 완두콩</span><span style="font-size:14px;font-weight:600;color:#008B48;">{{ peas.need }}개</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid #F3F4F6;color:#6B7280;"><span style="font-size:12px;font-weight:500;">남은 완두콩</span><span style="font-size:14px;font-weight:500;">{{ peas.left }}개</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button type="button" onClick="{{ closeConfirm }}" style="flex:1;height:44px;border:1px solid #E5E7EB;border-radius:8px;background:#fff;color:#4B5563;font:inherit;font-size:14px;font-weight:600;cursor:pointer;" style-hover="background:#F9FAFB;">취소</button>
+        <button type="button" onClick="{{ confirmFull }}" style="flex:1;height:44px;border:0;border-radius:8px;background:#008B48;color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer;" style-hover="background:#007A3F;">심층 평가 받기</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;gradingMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;기본 평가&quot;,&quot;options&quot;:[&quot;심층 평가&quot;,&quot;기본 평가&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;채점 상품&quot;},&quot;questionSet&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;2문제&quot;,&quot;options&quot;:[&quot;2문제&quot;,&quot;10문제&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;데이터&quot;},&quot;overrideScores&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;점수 조정 (구간 문구 확인용)&quot;},&quot;writingScore&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:88,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;점&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;점수 조정 (구간 문구 확인용)&quot;},&quot;univRate&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:95,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;점수 조정 (구간 문구 확인용)&quot;}}">
@@ -787,7 +834,12 @@ class Component extends DCLogic {
         { title: '문제별 채점 근거', desc: '평가 기준마다 어디서 점수를 얻고 잃었는지 알려드려요.' },
         { title: '모범 답안', desc: '내 답안과 나란히 비교하며 읽어볼 수 있어요.' },
       ],
-      goFull: () => this.setState({ mode: 'full' }),
+      goFull: () => this.setState({ confirmOpen: true }),
+      confirmOpen: !!this.state.confirmOpen,
+      closeConfirm: () => this.setState({ confirmOpen: false }),
+      confirmFull: () => this.setState({ confirmOpen: false, mode: 'full' }),
+      examTopic: '인공지능 시대의 창의성',
+      peas: { have: 300, need: 100, left: 200 },
       lockedRows: [{ no: '문제 1', width: '62%' }],
       ...this.questionVals(activeQ || QS[0], QS, progress),
     };
