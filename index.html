@@ -414,6 +414,36 @@
       </section>
       </sc-if>
 
+      <!-- 답안작성 유의사항 (위반 건만 표시, 없으면 영역 숨김) -->
+      <sc-if value="{{ hasNotices }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="답안작성 유의사항" style="background:#fff;border:1px solid #F3F4F6;border-radius:12px;box-shadow:0 1px 3px rgba(17,24,39,.04);overflow:hidden;">
+        <div style="padding:22px 30px 16px;">
+          <h3 style="margin:0;font-size:16px;font-weight:700;color:#111827;">답안작성 유의사항</h3>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding:0 30px 24px;">
+          <sc-for list="{{ qNotices }}" as="n" hint-placeholder-count="1">
+            <div style="display:flex;flex-wrap:wrap;border-radius:8px;background:#F9FAFB;box-sizing:border-box;">
+              <div style="flex:1 1 240px;display:flex;flex-direction:column;gap:4px;padding:16px 20px;box-sizing:border-box;">
+                <span style="font-size:13px;font-weight:500;line-height:1.5;color:#6B7280;">적정 분량 기준</span>
+                <span style="font-size:14px;font-weight:600;line-height:1.6;color:#111827;">{{ n.criterion }}</span>
+              </div>
+              <div style="flex:1 1 140px;display:flex;flex-direction:column;gap:4px;padding:16px 20px;border-left:1px solid #E5E7EB;box-sizing:border-box;">
+                <span style="font-size:13px;font-weight:500;line-height:1.5;color:#6B7280;">작성 결과</span>
+                <span style="font-size:14px;font-weight:600;line-height:1.6;color:#111827;">{{ n.result }}</span>
+              </div>
+              <div style="flex:2 1 300px;display:flex;flex-direction:column;gap:4px;padding:16px 20px;border-left:1px solid #E5E7EB;box-sizing:border-box;">
+                <span style="font-size:13px;font-weight:500;line-height:1.5;color:#6B7280;">확인 결과</span>
+                <span style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;font-weight:600;line-height:1.6;color:#4B5563;">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 10px;border-radius:999px;background:#FEF2F2;font-size:12px;font-weight:500;line-height:1.5;color:#DC2626;white-space:nowrap;">확인 필요</span>
+                  <span>{{ n.message }}</span>
+                </span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
       <!-- 내 답안 · 모범 답안 -->
       <div style="display:flex;flex-direction:column;gap:10px;">
         <section style="background:#fff;border:1px solid #F3F4F6;border-radius:12px;box-shadow:0 1px 3px rgba(17,24,39,.04);overflow:hidden;">
@@ -552,6 +582,8 @@ const QUESTIONS = [
     title: '(가)~(라)에 나타난 저항의 이유와 결과를 각 제시문의 사건과 인물에 맞게 서술하시오.',
     condition: '570자 이내 · 제시문 (가)~(라) 활용',
     chars: 537, charMin: 401, charLimit: 570, charsNoSpace: 406, submittedAt: '2026. 9. 11. 오후 2:47:06',
+    // 답안작성 유의사항: pass=false(위반)인 건만 화면에 노출 (프로토타입 예시 데이터)
+    checks: [{ criterion: '270자~330자', result: '210자', pass: false }],
     answer: A1, model: MODEL_PLACEHOLDER,
     passages: [
       { label: '[가]', hasText: true, text: '우리는 사회 속에서 많은 사람들과 관계를 맺으며, 환경과 영향을 주고받으며 살아가고 있다. 이처럼 복잡한 현대 사회에서 일어나는 현상을 하나의 관점만으로 설명한다는 것은 거의 불가능하다. 따라서 시간적·공간적·사회적·윤리적인 관점을 통해 종합적으로 이해하려고 노력할 필요가 있다.\n시간적 관점이란 우리 삶의 모습을 ‘과거’라는 거울에 비추어 보는 것이다. 다시 말해 시대적 배경과 맥락에 초점을 두고 사회 현상을 바라보는 것이다. (중략) 사회적 관점은 특정한 사회 현상을 사회 제도 및 사회 구조와의 관련성 속에서 이해하는 것이다. (중략) 윤리적 관점은 도덕적 가치 판단과 규범적 방향성에 초점을 두고 사회에서 발생하는 다양한 현상과 문제를 이해한다. (중략) 사회 문제를 특정한 관점으로만 분석하여 해결책을 찾으려 하면, 그 문제의 속성을 깊이 있게 이해할 수 없어 적절한 대책을 세우기 어렵다. 따라서 사회 문제를 탐구할 때에는 시간적, 공간적, 사회적, 윤리적 관점 등을 활용하여 통합적으로 바라보아야 한다.' },
@@ -754,6 +786,9 @@ class Component extends DCLogic {
       qUnivRate: rate, qUnivGradeLabel: uG.label, qUnivGradeColor: '#004E96', qUnivGradeBg: '#E1EBF5',
       qAreas: AREA_KEYS.map((k, i) => ({ label: k, color: AREAS[i].color, score: areas[k],
         shown: Math.round(areas[k] * progress), width: `${areas[k] * progress}%` })),
+      qNotices: (q.checks || []).filter(c => !c.pass)
+        .map(c => ({ ...c, message: '적정 분량 기준을 벗어났어요.' })),
+      hasNotices: (q.checks || []).some(c => !c.pass),
       qRubricCount: q.rubrics.length,
       modelChars: (q.model || '').length,
       qRubrics: q.rubrics.map((r, i) => ({ ...r, no: `평가 기준 ${i + 1}`,
