@@ -47,7 +47,15 @@
           <span>동국대학교(서울)</span>
         </div>
       </div>
-      <p style="flex:0 1 auto;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:0;font-size:13px;font-weight:500;line-height:1.6;color:#9CA3AF;"><span>이인수(insuni)</span><span style="color:#E5E7EB;">|</span><span>채점 완료: 2026.09.11</span></p>
+      <div style="flex:0 1 auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;">
+        <p style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:0;font-size:13px;font-weight:500;line-height:1.6;color:#9CA3AF;"><span>이인수(insuni)</span><span style="color:#E5E7EB;">|</span><span>채점 완료: 2026.09.11</span></p>
+        <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ printPage }}" style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:1px solid #D1D5DB;border-radius:8px;background:#fff;color:#374151;font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;" style-hover="background:#F9FAFB;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V2h12v7"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            출력
+          </button>
+        </sc-if>
+      </div>
     </header>
 
     <nav style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;">
@@ -424,7 +432,7 @@
           <sc-for list="{{ qNotices }}" as="n" hint-placeholder-count="1">
             <div style="display:flex;flex-wrap:wrap;border-radius:8px;background:#F9FAFB;box-sizing:border-box;">
               <div style="flex:1 1 240px;display:flex;flex-direction:column;gap:4px;padding:16px 20px;box-sizing:border-box;">
-                <span style="font-size:13px;font-weight:500;line-height:1.5;color:#6B7280;">적정 분량 기준</span>
+                <span style="font-size:13px;font-weight:500;line-height:1.5;color:#6B7280;">기준</span>
                 <span style="font-size:14px;font-weight:600;line-height:1.6;color:#111827;">{{ n.criterion }}</span>
               </div>
               <div style="flex:1 1 140px;display:flex;flex-direction:column;gap:4px;padding:16px 20px;border-left:1px solid #E5E7EB;box-sizing:border-box;">
@@ -483,9 +491,6 @@
               <div style="padding:0 30px 30px;">
                 <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
                   <div style="display:flex;flex-direction:column;gap:12px;">
-                    <div style="display:flex;justify-content:flex-end;">
-                      <span style="font-size:13px;font-weight:500;color:#6B7280;">{{ modelChars }}자 (적정 {{ activeQ.charMin }}~{{ activeQ.charLimit }}자)</span>
-                    </div>
                     <p style="margin:0;padding:24px;border-radius:8px;background:#F9FAFB;font-size:16px;line-height:1.9;color:#111827;word-break:keep-all;">{{ activeQ.model }}</p>
                   </div>
                 </sc-if>
@@ -870,6 +875,7 @@ class Component extends DCLogic {
         { title: '모범 답안', desc: '내 답안과 나란히 비교하며 읽어볼 수 있어요.' },
       ],
       goFull: () => this.setState({ confirmOpen: true }),
+      printPage: () => window.print(),
       confirmOpen: !!this.state.confirmOpen,
       closeConfirm: () => this.setState({ confirmOpen: false }),
       confirmFull: () => this.setState({ confirmOpen: false, mode: 'full' }),
