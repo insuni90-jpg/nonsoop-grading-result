@@ -48,7 +48,7 @@
         </div>
       </div>
       <div style="flex:0 1 auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;">
-        <p style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:0;font-size:13px;font-weight:500;line-height:1.6;color:#9CA3AF;"><span>이인수(insuni)</span><span style="color:#E5E7EB;">|</span><span>채점 완료: 2026.09.11</span></p>
+        <p style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:0;font-size:13px;font-weight:500;line-height:1.6;color:#9CA3AF;"><span>이인수(insuni)</span><span style="color:#E5E7EB;">|</span><span>{{ doneLabel }}: {{ doneAt }}</span></p>
         <sc-if value="{{ isFull }}" hint-placeholder-val="{{ true }}">
           <button type="button" onClick="{{ printPage }}" style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:1px solid #D1D5DB;border-radius:8px;background:#fff;color:#374151;font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;" style-hover="background:#F9FAFB;">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V2h12v7"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
@@ -876,6 +876,9 @@ class Component extends DCLogic {
       ],
       goFull: () => this.setState({ confirmOpen: true }),
       printPage: () => window.print(),
+      // 평가일 (프로토타입 예시 값)
+      doneLabel: mode === 'full' ? '심층 평가일' : '기본 평가일',
+      doneAt: mode === 'full' ? '2026.09.11 15:12' : '2026.09.11 14:52',
       confirmOpen: !!this.state.confirmOpen,
       closeConfirm: () => this.setState({ confirmOpen: false }),
       confirmFull: () => this.setState({ confirmOpen: false, mode: 'full' }),
